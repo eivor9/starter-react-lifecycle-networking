@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import days from "./data";
 const colors = [
   "papayawhip",
@@ -24,6 +24,33 @@ function App() {
   function updateIndex() {
     setIndex((index + 1) % days.length);
   }
+
+  function getFeaturedDog() {
+    fetch("https://dog.ceo/api/breeds/image/random")
+      .then((response) => response.json())
+      .then((json) => {
+        setDog(json);
+      })
+      .catch((err) => {
+        console.log("error fetching image");
+      });
+  }
+
+  useEffect(() => {
+    setNumber(Math.random());
+  }, []);
+
+  useEffect(() => {
+    setToday(days[index]);
+  }, [index]);
+
+  useEffect(() => {
+    setColor(colors[index]);
+  }, [today.month]);
+
+  useEffect(() => {
+  getFeaturedDog();
+}, []);
 
   return (
     <div className="App">
@@ -51,7 +78,7 @@ function App() {
           <h5>{vibe}</h5>
         </div>
         <div className="dog">
-          <button>Change dog</button>
+        <button onClick={getFeaturedDog}>Change dog</button>
           <h2>Featured dog:</h2>
           <img src={dog.message} alt="Featured Dog" />
         </div>
